@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import * as R from 'ramda';
-import produce from 'immer';
 
 import AskInput from '../components/AskInput';
 import Question from '../components/Question';
+
+import actions from '../redux/actions';
 
 const Lists = styled.div`
   display: flex;
@@ -13,46 +15,6 @@ const Lists = styled.div`
 `;
 
 class Questions extends Component {
-  state = {
-    questions: [
-      {
-        context: 'a',
-        star: false,
-        done: false,
-        like: 0,
-        timestamp: 0,
-      },
-      {
-        context: 'b',
-        star: true,
-        done: false,
-        like: 3,
-        timestamp: 1,
-      },
-      {
-        context: 'c',
-        star: true,
-        done: false,
-        like: 5,
-        timestamp: 2,
-      },
-      {
-        context: 'd',
-        star: true,
-        done: true,
-        like: 0,
-        timestamp: 3,
-      },
-      {
-        context: 'e',
-        star: true,
-        done: false,
-        like: 0,
-        timestamp: 4,
-      },
-    ],
-  };
-
   sortQuestion(questions) {
     return R.pipe(
       R.sortWith([
@@ -64,56 +26,26 @@ class Questions extends Component {
     )(questions);
   }
 
-  addQuestion = context =>
-    this.setState(
-      produce(draft => {
-        draft.questions.push({
-          context,
-          star: false,
-          done: false,
-          like: 0,
-          timestamp: Date.now(),
-        });
-      }),
-    );
-
-  addLike = timestamp =>
-    this.setState(
-      produce(({ questions }) => {
-        const target = questions.findIndex(el => el.timestamp === timestamp);
-        questions[target].like++;
-      }),
-    );
-
-  triggerStar = timestamp =>
-    this.setState(
-      produce(({ questions }) => {
-        const target = questions.findIndex(el => el.timestamp === timestamp);
-        questions[target].star = !questions[target].star;
-      }),
-    );
-
-  triggerDone = timestamp =>
-    this.setState(
-      produce(({ questions }) => {
-        const target = questions.findIndex(el => el.timestamp === timestamp);
-        questions[target].done = !questions[target].done;
-      }),
-    );
-
   render() {
-    const { questions } = this.state;
+    const {
+      questions,
+      addQuestion,
+      addLike,
+      triggerStar,
+      triggerDone,
+    } = this.props;
+
     return (
       <div>
-        <AskInput onAdd={this.addQuestion} />
+        <AskInput onAdd={addQuestion} />
         <Lists>
           {this.sortQuestion(questions).map((q, idx) => (
             <Question
-              key={idx}
+              key={q.timestamp}
               {...q}
-              addLike={() => this.addLike(q.timestamp)}
-              triggerStar={() => this.triggerStar(q.timestamp)}
-              triggerDone={() => this.triggerDone(q.timestamp)}
+              addLike={() => addLike(q.timestamp)}
+              triggerStar={() => triggerStar(q.timestamp)}
+              triggerDone={() => triggerDone(q.timestamp)}
             />
           ))}
         </Lists>
@@ -122,4 +54,18 @@ class Questions extends Component {
   }
 }
 
-export default Questions;
+const mapStateToProps = state => ({
+  questions: state.questions.questions,
+});
+
+const mapDispatchToProps = {
+  addQuestion: actions.questions.addQuestion.REQUEST,
+  addLike: actions.questions.addLike.REQUEST,
+  triggerStar: actions.questions.triggerStar.REQUEST,
+  triggerDone: actions.questions.triggerDone.REQUEST,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Questions);

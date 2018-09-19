@@ -1,9 +1,8 @@
 import { fork, all } from 'redux-saga/effects';
 
-// import authSagas from './authSaga';
+import questionsSaga from './questionsSaga';
 
-// const Watchers = [authSagas];
-const Watchers = [];
+const Watchers = [questionsSaga];
 
 export default function*() {
   yield all(Watchers.map(el => fork(el)));

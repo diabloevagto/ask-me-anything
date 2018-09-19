@@ -5,7 +5,10 @@ const createRequestTypes = baseType => ({
 });
 
 const questions = {
-  // AUTH_LOGOUT: createRequestTypes('AUTH_LOGOUT'),
+  addQuestion: createRequestTypes('addQuestion'),
+  addLike: createRequestTypes('addLike'),
+  triggerStar: createRequestTypes('triggerStar'),
+  triggerDone: createRequestTypes('triggerDone'),
 };
 
 export default {

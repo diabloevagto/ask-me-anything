@@ -8,7 +8,6 @@ import registerServiceWorker from './registerServiceWorker';
 import configureStore from './redux/store/configureStore';
 
 import App from './App';
-import actions from './redux/actions';
 
 const store = configureStore();
 

@@ -32,11 +32,11 @@ const Question = props => {
         <p>
           <i
             className={`${star ? 'fas' : 'far'} fa-star`}
-            onClick={triggerStar}
+            onClick={() => !done && triggerStar()}
           />
         </p>
         <p>
-          <i className="far fa-thumbs-up" onClick={addLike} />
+          <i className="far fa-thumbs-up" onClick={() => !done && addLike()} />
           {like}
         </p>
         <p>

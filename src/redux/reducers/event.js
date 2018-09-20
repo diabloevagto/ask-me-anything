@@ -4,13 +4,13 @@ import { handleActions } from 'redux-actions';
 import types from '../constants/actionTypes';
 
 const initialState = {
-  questions: [],
+  eventId: '',
 };
 
 export default handleActions(
   {
-    [types.questions.firestoreUpdate]: produce((draft, { payload }) => {
-      draft.questions = payload;
+    [types.event.setEventId]: produce((draft, { payload }) => {
+      draft.eventId = payload;
     }),
   },
   initialState,

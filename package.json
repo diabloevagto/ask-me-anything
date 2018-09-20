@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.3.1",
+    "firebase": "^5.5.0",
     "immer": "^1.7.1",
     "ramda": "^0.25.0",
     "react": "^16.5.2",

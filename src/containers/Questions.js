@@ -8,6 +8,10 @@ import Question from '../components/Question';
 
 import actions from '../redux/actions';
 
+import app from '../firebase/initializeFirebase';
+
+const { db } = app;
+
 const Lists = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,6 +19,21 @@ const Lists = styled.div`
 `;
 
 class Questions extends Component {
+  componentWillMount() {
+    const { setEventId, firestoreUpdate } = this.props;
+
+    const eventId = window.location.href.split('/').pop() || Date.now();
+    setEventId(eventId);
+
+    db.collection(eventId).onSnapshot(querySnapshot => {
+      var questions = [];
+      querySnapshot.forEach(doc => {
+        questions.push({ id: doc.id, ...doc.data() });
+      });
+      firestoreUpdate(questions);
+    });
+  }
+
   sortQuestion(questions) {
     return R.pipe(
       R.sortWith([
@@ -28,6 +47,7 @@ class Questions extends Component {
 
   render() {
     const {
+      eventId,
       questions,
       addQuestion,
       addLike,
@@ -37,15 +57,16 @@ class Questions extends Component {
 
     return (
       <div>
+        <h1>event id: {eventId}</h1>
         <AskInput onAdd={addQuestion} />
         <Lists>
           {this.sortQuestion(questions).map((q, idx) => (
             <Question
-              key={q.timestamp}
+              key={q.id}
               {...q}
-              addLike={() => addLike(q.timestamp)}
-              triggerStar={() => triggerStar(q.timestamp)}
-              triggerDone={() => triggerDone(q.timestamp)}
+              addLike={() => addLike(q.id)}
+              triggerStar={() => triggerStar(q.id)}
+              triggerDone={() => triggerDone(q.id)}
             />
           ))}
         </Lists>
@@ -55,10 +76,14 @@ class Questions extends Component {
 }
 
 const mapStateToProps = state => ({
+  eventId: state.event.eventId,
   questions: state.questions.questions,
 });
 
 const mapDispatchToProps = {
+  setEventId: actions.event.setEventId,
+  firestoreUpdate: actions.questions.firestoreUpdate,
+  //
   addQuestion: actions.questions.addQuestion.REQUEST,
   addLike: actions.questions.addLike.REQUEST,
   triggerStar: actions.questions.triggerStar.REQUEST,

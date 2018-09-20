@@ -1,66 +1,54 @@
 import { put, call, takeLatest, select } from 'redux-saga/effects';
-import produce from 'immer';
 
 import actions from '../actions';
 import types from '../constants/actionTypes';
 import { checkErrorMessageReturnAction } from './util';
+import {
+  addQuestion,
+  addLike,
+  triggerStar,
+  triggerDone,
+} from '../../firebase/questions';
 
-const getQuestion = state => state.questions.questions;
+const getEventId = state => state.event.eventId;
 
 function* addQuestionSaga({ payload }) {
-  const questions = yield select(getQuestion);
+  const eventId = yield select(getEventId);
+
+  const result = yield call(addQuestion, eventId, {
+    context: payload,
+    star: false,
+    done: false,
+    like: 0,
+  });
 
   yield put(
-    actions.questions.addQuestion.SUCCESS(
-      produce(questions, draft => {
-        draft.push({
-          context: payload,
-          star: false,
-          done: false,
-          like: 0,
-          timestamp: Date.now(),
-        });
-      }),
-    ),
+    checkErrorMessageReturnAction(actions.questions.addQuestion, result),
   );
 }
 
 function* addLikeSaga({ payload }) {
-  const questions = yield select(getQuestion);
-  const target = questions.findIndex(el => el.timestamp === payload);
+  const eventId = yield select(getEventId);
+  const result = yield call(addLike, eventId, payload);
 
-  yield put(
-    actions.questions.addLike.SUCCESS(
-      produce(questions, draft => {
-        draft[target].like++;
-      }),
-    ),
-  );
+  yield put(checkErrorMessageReturnAction(actions.questions.addLike, result));
 }
 
 function* triggerStarSaga({ payload }) {
-  const questions = yield select(getQuestion);
-  const target = questions.findIndex(el => el.timestamp === payload);
+  const eventId = yield select(getEventId);
+  const result = yield call(triggerStar, eventId, payload);
 
   yield put(
-    actions.questions.triggerStar.SUCCESS(
-      produce(questions, draft => {
-        draft[target].star = !draft[target].star;
-      }),
-    ),
+    checkErrorMessageReturnAction(actions.questions.triggerStar, result),
   );
 }
 
 function* triggerDoneSaga({ payload }) {
-  const questions = yield select(getQuestion);
-  const target = questions.findIndex(el => el.timestamp === payload);
+  const eventId = yield select(getEventId);
+  const result = yield call(triggerDone, eventId, payload);
 
   yield put(
-    actions.questions.triggerStar.SUCCESS(
-      produce(questions, draft => {
-        draft[target].done = !draft[target].done;
-      }),
-    ),
+    checkErrorMessageReturnAction(actions.questions.triggerDone, result),
   );
 }
 

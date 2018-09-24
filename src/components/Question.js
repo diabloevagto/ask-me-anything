@@ -15,6 +15,10 @@ const List = styled.div`
   }
 `;
 
+const LikeP = styled.p`
+  color: ${props => (props.beenLike ? 'blue' : 'black')};
+`;
+
 const Question = props => {
   const {
     context,
@@ -22,6 +26,7 @@ const Question = props => {
     done,
     like,
     addLike,
+    beenLike,
     triggerStar,
     triggerDone,
   } = props;
@@ -35,10 +40,13 @@ const Question = props => {
             onClick={() => !done && triggerStar()}
           />
         </p>
-        <p>
-          <i className="far fa-thumbs-up" onClick={() => !done && addLike()} />
-          {like}
-        </p>
+        <LikeP beenLike={beenLike}>
+          <i
+            className="far fa-thumbs-up"
+            onClick={() => !done && !beenLike && addLike()}
+          />
+          {like.length}
+        </LikeP>
         <p>
           <i className="far fa-trash-alt" onClick={triggerDone} />
         </p>

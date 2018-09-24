@@ -1,15 +1,15 @@
 import { getDocAndRef, addDoc } from './utils';
 
-export const addQuestion = async (eventId, payload) => {
+export const addQuestion = async ({ eventId }, payload) => {
   return await addDoc(eventId, payload);
 };
 
-export const addLike = async (eventId, payload) => {
+export const addLike = async ({ eventId, uuid }, payload) => {
   try {
     const { ref, data } = await getDocAndRef(eventId, payload);
 
     await ref.update({
-      like: data.like + 1,
+      like: [...data.like, uuid],
     });
 
     return true;
@@ -18,7 +18,7 @@ export const addLike = async (eventId, payload) => {
   }
 };
 
-export const triggerStar = async (eventId, payload) => {
+export const triggerStar = async ({ eventId }, payload) => {
   try {
     const { ref, data } = await getDocAndRef(eventId, payload);
 
@@ -32,7 +32,7 @@ export const triggerStar = async (eventId, payload) => {
   }
 };
 
-export const triggerDone = async (eventId, payload) => {
+export const triggerDone = async ({ eventId }, payload) => {
   try {
     const { ref, data } = await getDocAndRef(eventId, payload);
 

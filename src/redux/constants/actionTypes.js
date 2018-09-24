@@ -6,6 +6,7 @@ const createRequestTypes = baseType => ({
 
 const event = {
   setEventId: 'setEventId',
+  getUUID: createRequestTypes('getUUID'),
 };
 
 const questions = {

@@ -8,8 +8,10 @@ import registerServiceWorker from './registerServiceWorker';
 import configureStore from './redux/store/configureStore';
 
 import App from './App';
+import actions from './redux/actions';
 
 const store = configureStore();
+store.dispatch(actions.event.getUUID.REQUEST());
 
 ReactDOM.render(
   <Provider store={store}>

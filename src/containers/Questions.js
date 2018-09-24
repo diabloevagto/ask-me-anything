@@ -39,7 +39,12 @@ class Questions extends Component {
       R.sortWith([
         R.ascend(R.prop('done')),
         R.descend(R.prop('star')),
-        R.descend(R.prop('like')),
+        R.descend(
+          R.pipe(
+            R.prop('like'),
+            R.length,
+          ),
+        ),
         R.ascend(R.prop('timestamp')),
       ]),
     )(questions);
@@ -48,6 +53,7 @@ class Questions extends Component {
   render() {
     const {
       eventId,
+      uuid,
       questions,
       addQuestion,
       addLike,
@@ -64,6 +70,7 @@ class Questions extends Component {
             <Question
               key={q.id}
               {...q}
+              beenLike={q.like.indexOf(uuid) > -1}
               addLike={() => addLike(q.id)}
               triggerStar={() => triggerStar(q.id)}
               triggerDone={() => triggerDone(q.id)}
@@ -77,6 +84,7 @@ class Questions extends Component {
 
 const mapStateToProps = state => ({
   eventId: state.event.eventId,
+  uuid: state.event.uuid,
   questions: state.questions.questions,
 });
 

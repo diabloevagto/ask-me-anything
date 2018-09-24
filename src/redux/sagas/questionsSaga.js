@@ -10,16 +10,16 @@ import {
   triggerDone,
 } from '../../firebase/questions';
 
-const getEventId = state => state.event.eventId;
+const getEvent = state => state.event;
 
 function* addQuestionSaga({ payload }) {
-  const eventId = yield select(getEventId);
+  const event = yield select(getEvent);
 
-  const result = yield call(addQuestion, eventId, {
+  const result = yield call(addQuestion, event, {
     context: payload,
     star: false,
     done: false,
-    like: 0,
+    like: [],
   });
 
   yield put(
@@ -28,15 +28,15 @@ function* addQuestionSaga({ payload }) {
 }
 
 function* addLikeSaga({ payload }) {
-  const eventId = yield select(getEventId);
-  const result = yield call(addLike, eventId, payload);
+  const event = yield select(getEvent);
+  const result = yield call(addLike, event, payload);
 
   yield put(checkErrorMessageReturnAction(actions.questions.addLike, result));
 }
 
 function* triggerStarSaga({ payload }) {
-  const eventId = yield select(getEventId);
-  const result = yield call(triggerStar, eventId, payload);
+  const event = yield select(getEvent);
+  const result = yield call(triggerStar, event, payload);
 
   yield put(
     checkErrorMessageReturnAction(actions.questions.triggerStar, result),
@@ -44,8 +44,8 @@ function* triggerStarSaga({ payload }) {
 }
 
 function* triggerDoneSaga({ payload }) {
-  const eventId = yield select(getEventId);
-  const result = yield call(triggerDone, eventId, payload);
+  const event = yield select(getEvent);
+  const result = yield call(triggerDone, event, payload);
 
   yield put(
     checkErrorMessageReturnAction(actions.questions.triggerDone, result),

@@ -22,7 +22,7 @@ class Questions extends Component {
   componentWillMount() {
     const { setEventId, firestoreUpdate } = this.props;
 
-    const eventId = window.location.href.split('/').pop() || Date.now();
+    const eventId = window.location.href.split('/').pop() || Date.now() + '';
     setEventId(eventId);
 
     db.collection(eventId).onSnapshot(querySnapshot => {

@@ -54,6 +54,7 @@ class Questions extends Component {
     const {
       eventId,
       uuid,
+      isAdmin,
       questions,
       addQuestion,
       addLike,
@@ -71,6 +72,7 @@ class Questions extends Component {
               key={q.id}
               {...q}
               beenLike={q.like.indexOf(uuid) > -1}
+              isAdmin={isAdmin}
               addLike={() => addLike(q.id)}
               triggerStar={() => triggerStar(q.id)}
               triggerDone={() => triggerDone(q.id)}
@@ -85,6 +87,7 @@ class Questions extends Component {
 const mapStateToProps = state => ({
   eventId: state.event.eventId,
   uuid: state.event.uuid,
+  isAdmin: state.event.isAdmin,
   questions: state.questions.questions,
 });
 

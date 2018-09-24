@@ -27,6 +27,7 @@ const Question = props => {
     like,
     addLike,
     beenLike,
+    isAdmin,
     triggerStar,
     triggerDone,
   } = props;
@@ -34,12 +35,15 @@ const Question = props => {
     <List style={{ opacity: done ? 0.3 : 1 }}>
       <p>{context}</p>
       <div>
-        <p>
-          <i
-            className={`${star ? 'fas' : 'far'} fa-star`}
-            onClick={() => !done && triggerStar()}
-          />
-        </p>
+        {isAdmin && (
+          <p>
+            <i
+              className={`${star ? 'fas' : 'far'} fa-star`}
+              onClick={() => !done && triggerStar()}
+            />
+          </p>
+        )}
+
         <LikeP beenLike={beenLike}>
           <i
             className="far fa-thumbs-up"
@@ -47,9 +51,12 @@ const Question = props => {
           />
           {like.length}
         </LikeP>
-        <p>
-          <i className="far fa-trash-alt" onClick={triggerDone} />
-        </p>
+
+        {isAdmin && (
+          <p>
+            <i className="far fa-trash-alt" onClick={triggerDone} />
+          </p>
+        )}
       </div>
     </List>
   );

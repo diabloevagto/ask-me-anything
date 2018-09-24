@@ -6,6 +6,7 @@ import types from '../constants/actionTypes';
 const initialState = {
   eventId: '',
   uuid: null,
+  isAdmin: false,
 };
 
 export default handleActions(
@@ -14,7 +15,8 @@ export default handleActions(
       draft.eventId = payload;
     }),
     [types.event.getUUID.SUCCESS]: produce((draft, { payload }) => {
-      draft.uuid = payload;
+      draft.uuid = payload.uuid;
+      draft.isAdmin = payload.isAdmin;
     }),
   },
   initialState,

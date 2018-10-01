@@ -3,24 +3,14 @@ import { put, call, takeLatest, select } from 'redux-saga/effects';
 import actions from '../actions';
 import types from '../constants/actionTypes';
 import { checkErrorMessageReturnAction } from './util';
-import {
-  addQuestion,
-  addLike,
-  triggerStar,
-  triggerDone,
-} from '../../firebase/questions';
+
+import { addQuestion, addLike, triggerStar, triggerDone } from '../../api';
 
 const getEvent = state => state.event;
 
 function* addQuestionSaga({ payload }) {
   const event = yield select(getEvent);
-
-  const result = yield call(addQuestion, event, {
-    context: payload,
-    star: false,
-    done: false,
-    like: [],
-  });
+  const result = yield call(addQuestion, event, payload);
 
   yield put(
     checkErrorMessageReturnAction(actions.questions.addQuestion, result),

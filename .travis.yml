@@ -2,6 +2,9 @@ language: node_js
 node_js: stable
 install:
   - npm install
+  - cd functions
+  - npm install
+  - cd ..
 script:
   - npm run build
 deploy:

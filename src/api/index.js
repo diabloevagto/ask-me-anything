@@ -1,5 +1,7 @@
-// const API_ROOT = 'http://localhost:5000/ask-me-anything-66fe2/us-central1';
-const API_ROOT = 'https://us-central1-ask-me-anything-66fe2.cloudfunctions.net';
+const API_ROOT =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:5000/ask-me-anything-66fe2/us-central1'
+    : 'https://us-central1-ask-me-anything-66fe2.cloudfunctions.net';
 
 export const addQuestion = async ({ eventId }, context) => {
   const response = await fetch(`${API_ROOT}/questions/${eventId}/addQuestion`, {

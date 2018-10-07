@@ -24,7 +24,7 @@ function* getUUID() {
   yield put(
     actions.event.getUUID.SUCCESS({
       uuid,
-      isAdmin: uuid === adminUUID,
+      isAdmin: adminUUID.indexOf(uuid) != -1,
     }),
   );
 }

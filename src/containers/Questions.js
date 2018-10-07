@@ -64,7 +64,10 @@ class Questions extends Component {
 
     return (
       <div>
-        <h1>event id: {eventId}</h1>
+        <h1>
+          event id:
+          <a href={`${window.location.origin}/${eventId}`}>{eventId}</a>
+        </h1>
         <AskInput onAdd={addQuestion} />
         <Lists>
           {this.sortQuestion(questions).map((q, idx) => (
